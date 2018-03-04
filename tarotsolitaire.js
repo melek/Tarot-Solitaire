@@ -2,6 +2,6 @@
 
 var tarotsolitaire = function()
 {
-    TAROTSOL.deck.reset();
-    TAROTSOL.deck.shuffle();
+    tarotsol.deck.reset();
+    tarotsol.deck.shuffle();
 };
