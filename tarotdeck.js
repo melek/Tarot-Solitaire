@@ -111,3 +111,15 @@ tarotsol.deck.shuffle = function () {
     };
     document.writeln("<br>stock.length: "+tarotsol.stock.length+"<br>"+tarotsol.stock);
 };
+
+//Function to initialize the Stacks
+tarotsol.piles.reset = function () {
+    var num_piles = 9;
+    for(var i = 0; i < num_piles; i++) {
+        tarotsol.piles[i] = new Array ();
+        for (var p = num_piles - i; p > 0; p--)
+        {
+            tarotsol.piles[i].push(tarotsol.stock.pop());
+        }
+    }
+};
