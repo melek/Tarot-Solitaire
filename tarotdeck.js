@@ -84,7 +84,7 @@ var tarotsol = {
     // Declare variables for all the different collections of cards we have.
     deck : [],
     stock : [],
-    piles : [],
+    foundations : [],
     columns : [],
     waste : []    
 };
@@ -113,13 +113,13 @@ tarotsol.deck.shuffle = function () {
 };
 
 //Function to initialize the Stacks
-tarotsol.piles.reset = function () {
-    var num_piles = 9;
-    for(var i = 0; i < num_piles; i++) {
-        tarotsol.piles[i] = new Array ();
-        for (var p = num_piles - i; p > 0; p--)
+tarotsol.columns.deal = function () {
+    var num_columns = 9;
+    for(var i = 0; i < num_columns; i++) {
+        tarotsol.columns[i] = new Array ();
+        for (var p = num_columns - i; p > 0; p--)
         {
-            tarotsol.piles[i].push(tarotsol.stock.pop());
+            tarotsol.columns[i].push(tarotsol.stock.pop());
         }
     }
 };
