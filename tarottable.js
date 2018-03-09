@@ -12,7 +12,7 @@ tarottable.init = function () {
         <td id='tarottable_foundation_wands'></td>\
         <td id='tarottable_foundation_cups'></td>\
         <td id='tarottable_foundation_swords'></td>\
-        <td id='tarottable_foundation_disks'></td>\
+        <td id='tarottable_foundation_pentacles'></td>\
         </tr>");
         for(var c = 0; c < tarotsol.columns.length; c++)
         {
