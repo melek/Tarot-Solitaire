@@ -1,8 +1,10 @@
-#tarottable {
-    vertical-align: top;
-}
+/*#tarottable_container { }*/
 
+.tarottable_cell{
+    vertical-align: text-top;
+}
 .tarotsol_card {
     padding:10px;
     border:1px solid black;
+    display:inline-block;
 }
