@@ -4,6 +4,5 @@ var tarotsolitaire = function() {
     tarotsol.deck.reset();
     tarotsol.deck.shuffle();
     tarotsol.columns.deal();
-    tarottable.init();
-    tarottable.drawcols();
+    tarottable.draw();
 };
