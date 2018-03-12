@@ -1,6 +1,6 @@
 # Tarot Solitaire
 
-A variation of Klondike using a standard 78-card tarot pack. Created in JavaScript using HTML5 and CSS
+A variation of Klondike using a standard 78-card tarot pack. Created in JavaScript and displayed using HTML5 and CSS
 
 ## Getting Started
 
