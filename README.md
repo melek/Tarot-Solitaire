@@ -12,20 +12,8 @@ This project should run properly in any modern web browser with JavaScript enabl
 
 ### Running
 
-To include the game in any web page, simply include all the .js files, the included stylesheet, and run the tarotsolitaire() function where you want it to appear. Here the minimum code needed to display the project:
+To include the game in any web page, simply include all the .js files, the included stylesheet, and run the tarotsolitaire() function where you want it to appear. Refer to index.html for the minimum code needed to display the project.
 
-```
-<html><head>
-<link rel="stylesheet" href="style.css">
-<script src="tarotdeck.js"></script>
-<script src="tarottable.js"></script>
-<script src="tarotsolitaire.js"></script>
-</head><body>
-<script> tarotsolitaire();</script>
-</body></html>
-```
-
-That's it!
 
 ## Built With
 
