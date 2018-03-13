@@ -8,8 +8,7 @@ tarottable.init = function () {
     document.writeln("\
         <table id='tarottable_container'>\
         <tr><td id='tarottable_stock' class='tarottable_cell'></td>\
-        <td id='tarottable_waste' class='tarottable_cell'></td>\
-        <td id='tarottable_gap' class='tarottable_cell' colspan=2>\
+        <td id='tarottable_waste' class='tarottable_cell' colspan='3'></td>\
         <td id='tarottable_foundation_0' class='tarottable_cell'></td>\
         <td id='tarottable_foundation_1' class='tarottable_cell'></td>\
         <td id='tarottable_foundation_2' class='tarottable_cell'></td>\
@@ -34,11 +33,11 @@ tarottable.draw_cols = function () {
         {
             if(tarotsol.tarot_key[tarotsol.columns[i][j]].revealed == true)
             {
-                theseCards.push("<div id='tarotsol_card_"+tarotsol.columns[i][j]+"' class='tarotsol_card tarotsol_cardfront'>"+tarotsol.tarot_key[tarotsol.columns[i][j]].abbr+"</div><br>")
+                theseCards.push("<div id='tarotsol_card_"+tarotsol.columns[i][j]+"' class='tarotsol_card tarotsol_card_v tarotsol_cardfront'>"+tarotsol.tarot_key[tarotsol.columns[i][j]].abbr+"</div><br>")
             }
             else 
             {
-                theseCards.push("<div class='tarotsol_card tarotsol_cardback'></div><br>")
+                theseCards.push("<div class='tarotsol_card tarotsol_card_v tarotsol_cardback'></div><br>")
             }
         }
         document.getElementById("tarottable_col_"+i).innerHTML = theseCards.join("");
@@ -54,9 +53,16 @@ tarottable.draw_stock = function () {
     }
 };
 
-tarottable.draw_waste = function () {
+tarottable.draw_waste = function (num_reveal) {
     if (tarotsol.waste.length > 0) {
-        document.getElementById("tarottable_waste").innerHTML = "<div id='tarotsol_waste_div' class='tarotsol_card tarotsol_card_front'>"+tarotsol.waste[tarotsol.waste.length-1]+"</div>";    
+        if (num_reveal > tarotsol.waste.length) {
+            num_reveal = tarotsol.waste.length;
+        }
+        var theseCards = [];
+        for (var i = 1; i <= num_reveal; i++) {
+            theseCards.push("<div id='tarotsol_waste_"+tarotsol.waste[tarotsol.waste.length-i]+"' class='tarotsol_card tarotsol_card_h tarotsol_cardfront'>"+tarotsol.waste[tarotsol.waste.length-i]+"</div>")
+        }
+        document.getElementById("tarottable_waste").innerHTML = theseCards.join();
     }
     else {
         document.getElementById("tarottable_waste").innerHTML = "<div id='tarotsol_waste_div' class='tarotsol_card tarotsol_emptystack'></div>";
@@ -73,7 +79,7 @@ tarottable.draw_foundations = function () {
             document.getElementById("tarottable_foundation_"+i).innerHTML = "<div id='tarotsol_foundation_"+i+"_div'' class='tarotsol_card tarotsol_emptystack'></div>";
         }
     }
-}
+};
 
 tarottable.draw = function () {
     if(tarottable.initialized == false) {
@@ -81,6 +87,6 @@ tarottable.draw = function () {
     }
     tarottable.draw_cols();
     tarottable.draw_stock();
-    tarottable.draw_waste();
+    tarottable.draw_waste(3);
     tarottable.draw_foundations();
 };
