@@ -9,3 +9,4 @@ var tarotsolitaire = function() {
     }
     tarottable.draw();
 };
+
