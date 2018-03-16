@@ -1,27 +1,13 @@
 // tarottable.js depends on tarotsol.js
 
 var tarottable = {
-    initialized: false
+    initialized : false,
+    divs : []
 };
 
-tarottable.init = function () { 
-    document.writeln("\
-        <table id='tarottable_container'>\
-        <tr><td id='tarottable_stock' class='tarottable_cell'></td>\
-        <td id='tarottable_waste' class='tarottable_cell' colspan='3'></td>\
-        <td id='tarottable_foundation_0' class='tarottable_cell'></td>\
-        <td id='tarottable_foundation_1' class='tarottable_cell'></td>\
-        <td id='tarottable_foundation_2' class='tarottable_cell'></td>\
-        <td id='tarottable_foundation_3' class='tarottable_cell'></td>\
-        <td id='tarottable_foundation_4' class='tarottable_cell'></td>\
-        </tr>");
-    for(var c = 0; c < tarotsol.columns.length; c++)
-    {
-        document.write("<td id='tarottable_col_"+c+"' class='tarottable_cell tarottable_column'></td>");
-    }
-    document.write("</tr></table>");
-        tarottable.initialized = true;
-};
+tarottable.card_id = function (card_index) {
+    return "tarotsol_card_" + tarotsol.key[card_index].pos + "_" + card_index;
+}
 
 tarottable.card_div = function (card_index, stack_direction = "none") {
     // Strings to construct classes defined in project stylesheet   
@@ -44,8 +30,9 @@ tarottable.card_div = function (card_index, stack_direction = "none") {
     }
     
     // If the card has been revealed, display the front card with a value. Else, display blank card back.
-    if (tarotsol.tarot_key[card_index].revealed == true) {
-        return "<div id='tarotsol_card_"+card_index+"' class='tarotsol_card tarotsol_cardfront"+stack_class+"' >"+tarotsol.tarot_key[card_index].abbr+"</div>"+stack_html_suffix;
+    if (tarotsol.key[card_index].revealed == true) {
+        tarottable.divs.push(card_index);
+        return "<div id='"+tarottable.card_id(card_index)+"' class='tarotsol_card tarotsol_cardfront"+stack_class+"' >"+tarotsol.key[card_index].abbr+"</div>"+stack_html_suffix;
     }
     else {
         return "<div class='tarotsol_card tarotsol_cardback"+stack_class+"'></div>"+stack_html_suffix;
@@ -53,10 +40,14 @@ tarottable.card_div = function (card_index, stack_direction = "none") {
 };
 
 // Function which returns empty stack HTML.
-tarottable.card_placeholder_div = function () {
-    return "<div id='tarotsol_stock_div' class='tarotsol_card tarotsol_emptystack'></div>";
+tarottable.card_placeholder_div = function (div_id) {
+    if (div_id) {
+        return "<div id='"+div_id+"' class='tarotsol_card tarotsol_emptystack'></div>";
+    }
+    return "<div class='tarotsol_card tarotsol_emptystack'></div>";
 }
 
+// Function to draw the columns
 tarottable.draw_cols = function () {
     var theseCards = [];
     for(var i = 0; i < tarotsol.columns.length; i++)
@@ -71,15 +62,17 @@ tarottable.draw_cols = function () {
     }
 };
 
+// Function to draw the stock
 tarottable.draw_stock = function () {
     if (tarotsol.stock.length > 0) {
-        document.getElementById("tarottable_stock").innerHTML = tarottable.card_div(0, "none");
+        document.getElementById("tarottable_stock").innerHTML = tarottable.card_div(tarotsol.stock[tarotsol.stock.length-1], "none");
     }
     else {
         document.getElementById("tarottable_stock").innerHTML = tarottable.card_placeholder_div();
     }
 };
 
+// Function to draw the waste/discard pile
 tarottable.draw_waste = function (num_reveal = 1) {
     if (tarotsol.waste.length > 0) {
         waste_length = tarotsol.waste.length;
@@ -97,6 +90,7 @@ tarottable.draw_waste = function (num_reveal = 1) {
     }
 };
 
+// Function to draw the foundations
 tarottable.draw_foundations = function () {
     for (var i = 0; i < 5; i++)
     {
@@ -109,12 +103,50 @@ tarottable.draw_foundations = function () {
     }
 };
 
-tarottable.draw = function () {
-    if(tarottable.initialized == false) {
-        tarottable.init();
+// Temporary onclick function
+tarottable.card_onclick = function (i) {
+    console.log("Clicked " + tarotsol.key[i].name + ". Position: " + tarotsol.key[i].pos);
+};
+
+tarottable.add_event = function (card_index) {
+    element = document.getElementById(tarottable.card_id(card_index));
+    if (element) {
+        element.addEventListener("click", function () { tarottable.card_onclick(card_index, tarotsol.key[card_index].pos) } );
     }
+};
+
+tarottable.init = function () {
+    if (tarottable.initialized) return;
+    document.writeln("\
+        <table id='tarottable_container'>\
+        <tr><td id='tarottable_stock' class='tarottable_cell'></td>\
+        <td id='tarottable_waste' class='tarottable_cell' colspan='3'></td>\
+        <td id='tarottable_foundation_0' class='tarottable_cell'></td>\
+        <td id='tarottable_foundation_1' class='tarottable_cell'></td>\
+        <td id='tarottable_foundation_2' class='tarottable_cell'></td>\
+        <td id='tarottable_foundation_3' class='tarottable_cell'></td>\
+        <td id='tarottable_foundation_4' class='tarottable_cell'></td>\
+        </tr>");
+    for(var c = 0; c < tarotsol.columns.length; c++)
+    {
+        document.write("<td id='tarottable_col_"+c+"' class='tarottable_cell tarottable_column'></td>");
+    }
+    document.write("</tr></table>");
+    // Only run once.
+    tarottable.initialized = true;
+};
+
+// Combined drawing function
+tarottable.draw = function () {
+    tarottable.init();
+    tarottable.divs = [];
     tarottable.draw_cols();
     tarottable.draw_stock();
-    tarottable.draw_waste(3);
+    tarottable.draw_waste(tarotsol.num_discard);
     tarottable.draw_foundations();
+    
+    // Create events
+    for (i = 0; i < tarottable.divs.length; i++) {
+        tarottable.add_event(tarottable.divs[i]);
+    }
 };

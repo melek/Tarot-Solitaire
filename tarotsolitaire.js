@@ -7,4 +7,3 @@ var tarotsolitaire = function() {
     tarotsol.stock.discard(4);
     tarottable.draw();
 };
-

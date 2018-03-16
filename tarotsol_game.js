@@ -1,0 +1,3 @@
+tarotsol.game = {
+
+};
