@@ -1,6 +1,6 @@
 /*#tarottable_container { }*/
 
-.tarottable_cell{
+.tarottable_cell {
     vertical-align: top;
 }
 
@@ -34,8 +34,19 @@
 
 .tarotsol_cardfront {
     background-color:white;
+    z-index: 9  ;
+}
+
+.tarotsol_cardfront:hover {
+    box-shadow: 0 0 10px 3px turquoise;
+    z-index: 10;
 }
 
 .tarotsol_emptystack {
     border:3px black dotted;
+}
+
+.tarotsol_selected {
+    box-shadow: 0 0 8px 2px turquoise;
+    z-index: 10;
 }
