@@ -2,7 +2,7 @@
 
 var tarottable = {
     initialized : false,
-    selected : -1, // -1 is the magic number to mean nothing is selected.
+    selected : -1, /* -1 is the magic number to mean nothing is selected. */
     divs : [],
     click_events : []
 };
@@ -119,33 +119,55 @@ tarottable.draw_foundations = function () {
     }
 };
 
-// Temporary onclick function
-tarottable.card_onclick = function (i) {
-    console.log("Clicked " + tarotsol.key[i].name + ". Position: " + tarotsol.key[i].pos);
-};
-
 // Card selection function
-tarottable.event_select = function (card_index) {
+tarottable.event_select = function (event_var) {
+    // If a card is selected, then do the appropriate action based on the second card.
     if (tarottable.selected >= 0) {
-        tarotsol.game.move_col2col(tarotsol.key[tarottable.selected].pos,tarotsol.key[tarottable.selected].posi,tarotsol.key[card_index].pos);
-        console.log("Card moved and deselected!");
-        tarottable.selected = -1;
+        // Most cards clicked on return integers, but some return magic words.
+        if (Number.isNaN(event_var)) {
+            if (event_var == "waste") {
+                // Do something
+            }
+            else if (event_var == "stock") {
+                // Do something
+            }
+            else if (event_var == "foundation") {
+                // Do something
+            }
+        }
+        // If a card is selected and you've clicked on a face-up card, do the appropriate action based on position of each.
+        else {
+            var from_pos = tarotsol.key[tarottable.selected].pos;
+            var from_posi = tarotsol.key[tarottable.selected].posi;
+            var to_pos = tarotsol.key[event_var].pos;
+
+            if(Number.isInteger(from_pos)) {
+                tarotsol.game.move_card_to_col(from_pos,from_posi,to_pos);
+                console.log("Card move attempted and card deselected!");
+                tarottable.selected = -1;
+            } 
+        }
     }
+
+    // If no card is selected, set selected card to the event_var
     else {
-        tarottable.selected = card_index;
-        console.log("Selected: " + card_index + ": " + tarotsol.key[card_index].pos + "[" + tarotsol.key[card_index].posi + "]");
+        tarottable.selected = event_var;
+        console.log("Selected: " + event_var + ": " + tarotsol.key[event_var].pos + "[" + tarotsol.key[event_var].posi + "]");
     }
+
+    // In any event, redraw the table.
     tarottable.draw();
 };
 
-// Functions to iterate through event divs and add/clear ALL events
-tarottable.add_all_events = function (card_index) {
+// Functions to iterate through divs[] and add appropriate events
+tarottable.add_all_events = function () {
     for (var i = 0; i < tarottable.divs.length; i++) {
         tarottable.add_event(tarottable.divs[i]);
     }    
 };
 
-tarottable.clear_all_events = function (card_index) {
+// Function to clear ALL events and reset divs[]
+tarottable.clear_all_events = function () {
     for (var i = 0; i < tarottable.divs.length; i++) {
         tarottable.clear_event(tarottable.divs[i]);
     }    
@@ -153,19 +175,35 @@ tarottable.clear_all_events = function (card_index) {
     tarottable.divs = [];
 };
 
-// Helper functions to clear/add events
-tarottable.add_event = function (card_index) {
-    element = document.getElementById(tarottable.card_id(card_index));
-    if (element) {
-        tarottable.click_events[card_index] = function () { tarottable.event_select(card_index); };
-        element.addEventListener("click", tarottable.click_events[card_index]);
+// Helper function to add events
+tarottable.add_event = function (div_var) {
+    if (!isNaN(div_var)) {
+        element = document.getElementById(tarottable.card_id(div_var));
+        if (element) {
+            tarottable.click_events[div_var] = function () { tarottable.event_select(div_var); };
+            element.addEventListener("click", tarottable.click_events[div_var]);
+        }
+    }
+    //If card_index is not a number, then this event is for a placeholder card whose id is div_var
+    else {
+        element = document.getElementById(div_var);
+        if (element) {
+            tarottable.click_events[div_var] = function () { tarottable.event_select(div_var); };
+            element.addEventListener("click", tarottable.click_events[div_var]);
+        }
     }
 };
 
+// Helper function to clear events
 tarottable.clear_event = function (card_index) {
-    element = document.getElementById(tarottable.card_id(card_index));
-    if (element) {
-        element.removeEventListener("click", tarottable.click_events[card_index]);
+    if (!isNaN(card_index)) {
+        element = document.getElementById(tarottable.card_id(card_index));
+        if (element) {
+            element.removeEventListener("click", tarottable.click_events[card_index]);
+        }
+    }
+    else {
+
     }
 };
 
@@ -196,7 +234,7 @@ tarottable.draw = function () {
     tarottable.init();
 
     // Clear events 
-    tarottable.clear_all_events(tarottable.divs);
+    tarottable.clear_all_events();
     
     tarottable.draw_cols();
     tarottable.draw_stock();
