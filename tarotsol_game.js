@@ -35,7 +35,7 @@ tarotsol.game.move_card_to_col = function (source_col, sub_index, dest_col) {
 
     // Handle Court Cards specially.
     if (from_card.number > 10 && from_card.color != "wild") {
-        
+        // To Do
     }
 
     // Next check to see if the move is valid number-wise.
@@ -60,6 +60,7 @@ tarotsol.game.move_card_to_col = function (source_col, sub_index, dest_col) {
         }
     }
     
+    // If the move isn't valid by now just give up.
     if (!valid_move) {
         console.log("Invalid move attempted (number-wise error: "+from_card.number+" onto "+to_card.number+").");
         return;
