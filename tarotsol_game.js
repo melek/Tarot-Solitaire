@@ -3,6 +3,8 @@ tarotsol.game = function () {
 
 };
 
+// This function adds the digits of a number together recursively to produce a single-digit sum.
+// The rules of the game needs these sums for double-digit value cards (10-21).
 tarotsol.game.add_digits = function (num) {
     var sum = 0;
     while (num) {
